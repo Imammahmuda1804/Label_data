@@ -215,41 +215,133 @@ export default function Home() {
           />
         </div>
 
-        {/* Annotation Guideline */}
+        {/* Annotation Guideline — Lampiran X */}
         <details className="mb-4 bg-white rounded-xl border border-gray-200">
           <summary className="px-4 py-3 cursor-pointer text-sm font-medium text-blue-700 hover:text-blue-800 select-none">
-            📋 Panduan Anotasi
+            📋 Panduan Anotasi (Lampiran X)
           </summary>
-          <div className="px-4 pb-4 text-sm text-gray-700 space-y-3 border-t border-gray-100 pt-3">
+          <div className="px-4 pb-4 text-sm text-gray-700 space-y-4 border-t border-gray-100 pt-3">
+            {/* Prinsip */}
+            <p className="text-xs text-gray-500 italic">
+              Label ditentukan berdasarkan makna keseluruhan (<em>overall sentiment</em>) ulasan, bukan rating.
+              Rating hanya digunakan sebagai pendukung jika teks sangat ambigu.
+            </p>
+
+            {/* Definisi Label */}
             <div>
-              <strong>Netral</strong> — Ulasan berisi informasi faktual tanpa opini/perasaan.
+              <strong className="text-emerald-700">Positif</strong> — Ulasan secara keseluruhan menunjukkan pengalaman memuaskan atau penilaian baik.
               <br />
               <span className="text-gray-500 text-xs">
-                Contoh: &quot;Tiket masuk Rp 25.000, buka jam 8 pagi&quot;
+                Ciri: lebih banyak memuji, merekomendasikan, kepuasan dominan, kekurangan hanya ringan.
+                <br />Contoh: &quot;Tempatnya sangat indah dan bersih&quot; · &quot;Worth it banget buat dikunjungi&quot;
+                <br />&quot;Jalannya agak sempit, tapi pemandangannya luar biasa&quot; → Positif (kekurangan ringan)
               </span>
             </div>
+
             <div>
-              <strong>Positif</strong> — Ulasan mengandung pujian, kepuasan, atau rekomendasi.
+              <strong className="text-red-700">Negatif</strong> — Ulasan secara keseluruhan menunjukkan ketidakpuasan terhadap destinasi.
               <br />
               <span className="text-gray-500 text-xs">
-                Contoh: &quot;Pemandangannya indah banget, recommended!&quot;
+                Ciri: lebih banyak mengeluh, kecewa, kekurangan memengaruhi pengalaman, tidak merekomendasikan.
+                <br />Contoh: &quot;Toilet sangat kotor&quot; · &quot;View bagus, tapi fasilitas rusak dan tidak terawat&quot; → Negatif
               </span>
             </div>
+
             <div>
-              <strong>Negatif</strong> — Ulasan mengandung keluhan, kekecewaan, atau kritik.
+              <strong className="text-slate-700">Netral</strong> — Tidak menunjukkan kecenderungan positif maupun negatif yang kuat.
               <br />
               <span className="text-gray-500 text-xs">
-                Contoh: &quot;Tempatnya kotor, pelayanan buruk&quot;
+                Meliputi: (A) Informasi tanpa opini — &quot;Tiket masuk Rp15.000&quot;
+                <br />(B) Opini seimbang — kelebihan dan kekurangan bobotnya hampir sama.
+                <br />&quot;Air terjunnya bagus, namun akses menuju lokasi cukup sulit&quot; → Netral
               </span>
             </div>
+
             <hr className="border-gray-200" />
+
+            {/* Aturan Penentuan */}
+            <p className="font-semibold text-gray-800 text-xs uppercase tracking-wide">Aturan Penentuan Label</p>
+
             <div>
-              <strong>Dua sentimen?</strong> Pilih yang <em>paling dominan</em> dalam ulasan.
+              <strong>1. Makna keseluruhan</strong> — Gunakan kesan utama penulis, bukan jumlah kata positif/negatif.
             </div>
+
             <div>
-              <strong>Hapus</strong> jika ulasan berupa spam, promosi, tidak relevan, atau tidak jelas maksudnya — jangan diberi label.
+              <strong>2. Kata penghubung</strong> — Perhatikan <em>tetapi, namun, tapi, walaupun, meskipun</em> — bagian setelahnya sering merupakan inti pendapat.
+              <br />
+              <span className="text-gray-500 text-xs">
+                &quot;Jalannya rusak, tapi pemandangannya luar biasa&quot; → Positif
+                <br />&quot;Pemandangannya bagus, tapi toiletnya sangat kotor&quot; → Negatif
+              </span>
             </div>
+
+            <div>
+              <strong>3. Multi-aspek</strong> — Jika membahas beberapa aspek (pemandangan, akses, fasilitas, harga, kebersihan), label berdasarkan pengalaman keseluruhan, bukan banyaknya aspek.
+            </div>
+
+            <div>
+              <strong>4. Dulu vs sekarang</strong> — Jika membandingkan kondisi masa lalu dan sekarang, ikuti kondisi saat ini.
+              <br />
+              <span className="text-gray-500 text-xs">
+                &quot;Dulu bagus, sekarang hampir terbengkalai&quot; → Negatif
+                <br />&quot;Dulu biasa saja, sekarang jauh lebih bagus&quot; → Positif
+              </span>
+            </div>
+
+            <div>
+              <strong>5. Seimbang?</strong> Jika kelebihan dan kekurangan bobotnya hampir sama → <strong>Netral</strong>.
+            </div>
+
+            <div>
+              <strong>6. Dominan?</strong> Jika salah satu sisi jauh lebih dominan → ikuti sisi dominan.
+              <br />
+              <span className="text-gray-500 text-xs">
+                &quot;Pemandangannya bagus, tapi toilet kotor, parkiran sempit, banyak sampah&quot; → Negatif
+              </span>
+            </div>
+
             <hr className="border-gray-200" />
+
+            {/* Rating & Hapus */}
+            <div>
+              <strong>Rating vs teks bertentangan?</strong> Ikuti isi teks. Prioritas: isi ulasan → makna keseluruhan → rating.
+              <br />
+              <span className="text-gray-500 text-xs">
+                ⭐⭐⭐⭐⭐ &quot;Toilet kotor dan fasilitas rusak&quot; → Negatif · ⭐⭐ &quot;Tempatnya sangat indah&quot; → Positif
+              </span>
+            </div>
+
+            <div>
+              <strong className="text-red-600">Hapus</strong> (jangan dilabeli) jika ulasan: hanya emoji, hanya satu kata tanpa konteks (&quot;Ok&quot;, &quot;Nice&quot;), spam, duplikat, atau seluruh isi berbahasa asing.
+            </div>
+
+            <hr className="border-gray-200" />
+
+            {/* Tabel Ringkasan */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-1.5 pr-2 font-semibold text-gray-600">Kondisi</th>
+                    <th className="text-left py-1.5 font-semibold text-gray-600">Label</th>
+                  </tr>
+                </thead>
+                <tbody className="text-gray-600">
+                  <tr className="border-b border-gray-100"><td className="py-1 pr-2">Mayoritas memuji</td><td className="text-emerald-700 font-medium">Positif</td></tr>
+                  <tr className="border-b border-gray-100"><td className="py-1 pr-2">Mayoritas mengeluh</td><td className="text-red-700 font-medium">Negatif</td></tr>
+                  <tr className="border-b border-gray-100"><td className="py-1 pr-2">Kekurangan hanya ringan</td><td className="text-emerald-700 font-medium">Positif</td></tr>
+                  <tr className="border-b border-gray-100"><td className="py-1 pr-2">Kelebihan &amp; kekurangan seimbang</td><td className="text-slate-700 font-medium">Netral</td></tr>
+                  <tr className="border-b border-gray-100"><td className="py-1 pr-2">Informasi tanpa opini</td><td className="text-slate-700 font-medium">Netral</td></tr>
+                  <tr className="border-b border-gray-100"><td className="py-1 pr-2">Banyak pujian, sedikit kritik</td><td className="text-emerald-700 font-medium">Positif</td></tr>
+                  <tr className="border-b border-gray-100"><td className="py-1 pr-2">Sedikit kelebihan, banyak keluhan</td><td className="text-red-700 font-medium">Negatif</td></tr>
+                  <tr className="border-b border-gray-100"><td className="py-1 pr-2">Rating bertentangan dengan isi</td><td className="font-medium">Ikuti isi ulasan</td></tr>
+                  <tr><td className="py-1 pr-2">Perbandingan dulu–sekarang</td><td className="font-medium">Ikuti kondisi saat ini</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <hr className="border-gray-200" />
+
             <div className="text-xs text-gray-400">
               Shortcut keyboard: <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">1</kbd> Netral · <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">2</kbd> Positif · <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">3</kbd> Negatif · <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">←→</kbd> Navigasi
             </div>
